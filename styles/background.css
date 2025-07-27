@@ -1,0 +1,66 @@
+.background-container {
+    position: fixed; /* Фиксируем фон, чтобы он не прокручивался */
+    top: 0;
+    left: 0;
+    width: 100vw; /* Ширина всего окна просмотра */
+    height: 100vh; /* Высота всего окна просмотра */
+    z-index: -1; /* Отправляем фон на задний план */
+    pointer-events: none; /* Чтобы фон не перехватывал клики */
+}
+
+.rain-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Чтобы капли не выходили за пределы контейнера */
+}
+
+.rain-drop {
+    position: absolute;
+    background: rgba(139, 0, 0, 0.6); /* Темно-кровавый цвет, полупрозрачный */
+    width: 2px; /* Толщина капли */
+    height: 30px; /* Длина капли */
+    animation: fall linear infinite; /* Анимация падения */
+    opacity: 0; /* Изначально скрываем, чтобы JS мог управлять появлением */
+}
+
+/* Анимация падения капли */
+@keyframes fall {
+    0% {
+        transform: translateY(-100px); /* Начинаем чуть выше экрана */
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh); /* Падаем за пределы экрана */
+        opacity: 0;
+    }
+}
+
+.lightning-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0; /* Должен быть выше rain-container, но ниже content */
+    overflow: visible; /* Чтобы молния могла выходить за границы SVG, если нужно */
+}
+
+.lightning-path {
+    fill: none; /* Молния - это линия, а не заливка */
+    stroke: rgba(255, 255, 255, 0.8); /* Белый цвет молнии, полупрозрачный */
+    stroke-width: 3px; /* Толщина молнии */
+    stroke-linecap: round; /* Закругленные концы линии */
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.6)); /* Эффект свечения */
+    opacity: 0; /* Изначально скрыта */
+    transition: opacity 0.25s ease-out; /* Очень быстрая анимация появления/исчезновения */
+}

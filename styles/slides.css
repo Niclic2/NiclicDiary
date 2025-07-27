@@ -1,0 +1,140 @@
+/* css/slides.css */
+
+/* Обертка для контейнера слайдов, чтобы скрыть вертикальный скролл */
+.slides-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* Скрываем вертикальный скролл */
+    z-index: 5; /* Ниже шапки, но выше фонового дождя */
+}
+
+/* Контейнер для всех слайдов */
+.slides-container {
+    width: 100%;
+    height: 100%; /* Занимает всю высоту wrapper */
+    transition: transform 1s ease-in-out; /* Плавный переход при смене слайдов */
+    will-change: transform; /* Оптимизация для анимации transform */
+}
+
+/* Стили для каждого слайда */
+.slide {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    position: relative;
+    pointer-events: none; /* Изначально клики не проходят */
+
+    /* Transition для всех анимируемых свойств */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, top 0.5s ease-out; /* Добавил top на всякий случай */
+}
+
+/* Активный слайд: полностью виден и нормального размера */
+.slide.active {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto; /* На активном слайде можно взаимодействовать */
+}
+
+/* --- Классы для анимации исчезновения --- */
+/* Слайд, который уходит (становится неактивным).
+   Это правило применяется ко всем слайдам, у которых нет класса .active.
+   Оно заставляет их исчезать и уменьшаться.
+*/
+.slide:not(.active) {
+    opacity: 0;
+    transform: scale(0.8); /* Уменьшается */
+}
+
+
+/* --- Классы для анимации появления (из-за границ) --- */
+/* Эти классы будут применяться к nextSlide ПЕРЕД тем, как slidesContainer начнет движение.
+   Они устанавливают начальное положение слайда за экраном.
+   Важно: эти классы должны быть более специфичными, чем .slide:not(.active),
+   чтобы их transform: translateY имел приоритет.
+*/
+
+/* Слайд, который приходит сверху (когда прокрутка вверх) */
+.slide.from-top {
+    transform: translateY(-100vh) scale(0.8); /* Изначально за экраном сверху, уменьшен */
+    opacity: 0; /* Изначально невидимый */
+}
+
+/* Слайд, который приходит снизу (когда прокрутка вниз) */
+.slide.from-bottom {
+    transform: translateY(100vh) scale(0.8); /* Изначально за экраном снизу, уменьшен */
+    opacity: 0; /* Изначально невидимый */
+}
+
+/* Когда слайд становится активным, он возвращается к нормальному состоянию.
+   Это правило имеет приоритет над from-top/from-bottom и :not(.active).
+   Слайд плавно перемещается в translateY(0) и становится видимым/нормальным.
+*/
+.slide.active {
+    opacity: 1;
+    transform: translateY(0) scale(1); /* Возвращаем translateY в 0 */
+}
+
+/* Стили для текста на слайдах (как раньше) */
+.slide-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 8em;
+    color: #f0f0f0;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.4), 
+        0 0 20px rgba(255, 255, 255, 0.2), 
+        0 0 30px rgba(0, 0, 0, 0.8);
+    margin: 0;
+    padding: 20px;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.slide-subtitle {
+    font-family: 'Georgia', serif;
+    font-size: 3em;
+    color: #e0e0e0;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    margin-bottom: 20px;
+}
+
+.slide-text {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.2em;
+    color: #c0c0c0;
+    max-width: 600px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.slide-indicators {
+    position: fixed; /* Фиксируем на экране */
+    bottom: 20px; /* Отступ от низа */
+    left: 50%; /* Центрируем по горизонтали */
+    transform: translateX(-50%); /* Точная центровка */
+    display: flex; /* Для горизонтального расположения кругляшков */
+    gap: 10px; /* Расстояние между кругляшками */
+    z-index: 15; /* Убедимся, что они поверх всего */
+}
+
+.indicator-dot {
+    width: 12px;
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.3); /* Полупрозрачный белый */
+    border-radius: 50%; /* Делаем кругляшком */
+    cursor: pointer; /* Показываем, что на них можно кликнуть */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Плавная анимация при наведении/активности */
+    border: 1px solid rgba(0,0,0,0.5); /* Небольшая темная рамка */
+}
+
+.indicator-dot.active {
+    background-color: rgba(255, 255, 255, 0.8); /* Ярче, когда активен */
+    transform: scale(1.2); /* Немного увеличиваем */
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); /* Добавляем свечение */
+}

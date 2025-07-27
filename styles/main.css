@@ -1,0 +1,7 @@
+body {
+    margin: 0;
+    overflow: hidden; /* Скрываем скролл, если дождь выходит за границы */
+    background-color: #0e0e0e; /* Ваш темный фон */
+    font-family: sans-serif; /* Пример шрифта для контента */
+    color: #eee; /* Цвет текста для контента */
+}
