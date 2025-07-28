@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>  
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Niclic Diary - Projects</title>
+        <link rel="stylesheet" href="styles/main.css"/>
+        <link rel="stylesheet" href="styles/header.css"/>
+        <link rel="stylesheet" href="styles/animations.css">
+        <link rel="stylesheet" href="styles/projects-design.css">
+    </head>
+
+    <body>
+        <header class="main-header"> <!-- Верхняя панель -->
+            <div class="header-background"></div>
+            </div>
+            <nav class="header-nav">
+                <div class="nav-left">
+                    <button class="nav-button" data-page="diary.html">Дневник</button>
+                    <button class="nav-button" data-page="projects.html">Проекты</button>
+                </div>
+                <div class="nav-center">
+                    <button class="main-menu-button" data-page="index.html">
+                        <span class="menu-icon"></span>
+                        <span class="menu-text">Menu</span>
+                    </button>
+                </div>
+                <div class="nav-right">
+                    <button class="nav-button" data-page="contact.html">Контакты</button>
+                    <button class="nav-button" data-page="support.html">Поддержка</button>
+                </div>
+            </nav>
+        </header>
+
+        <main class="projects-content-wrapper">
+            <div class="projects-grid">
+                <h1 class="projects-title">Мои Проекты</h1>
+                <p class="projects-intro">Здесь представлены мои работы. Кликните на проект, чтобы узнать больше.</p>
+                
+                <!-- Убедитесь, что этот div существует и имеет id="projects-list" -->
+                <div id="projects-list" class="projects-list">
+                    <!-- Шаблон проекта будет создаваться JS -->
+                </div>
+                
+                <!-- Убедитесь, что этот p существует и имеет класс "loading-message" -->
+                <p class="loading-message"></p>
+                
+                <!-- Убедитесь, что этот p существует и имеет класс "error-message" -->
+                <p class="error-message" style="display: none; color: red;">Не удалось загрузить проекты. Попробуйте позже.</p>
+            </div>
+        </main>
+
+        <script src="scripts/page-transition.js"></script>
+        <script src="scripts/projects.js"></script>
+    </body>
+</html>

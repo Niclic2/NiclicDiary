@@ -1,14 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
     const rainContainer = document.querySelector('.rain-container');
     const lightningSvg = document.querySelector('.lightning-svg');
+    const backgroundOverlay = document.querySelector('.background-overlay');
+    const backgroundElement = document.body; // Элемент, который будет менять цвет
     const numDrops = 150; // Количество капель дождя
     const maxDropHeight = 40; // Максимальная длина капли
     const minDropHeight = 20; // Минимальная длина капли
-    const maxDropWidth = 3; // Максимальная толщина капли
+    const maxDropWidth = 4; // Максимальная толщина капли
     const minDropWidth = 1; // Минимальная толщина капли
 
     // --- Генерация капель дождя ---
-    function createRainDrop() {
+    function createRainDrop() {    
         const drop = document.createElement('div');
         drop.classList.add('rain-drop');
 
@@ -42,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         pathData.push(`M ${currentX} ${currentY}`); // Начальная точка (Move To)
 
         const segmentHeight = 50; // Примерная высота одного сегмента зигзага
-        const maxOffset = 20;    // Максимальное отклонение по X для зигзага
+        const maxOffset = 80;    // Максимальное отклонение по X для зигзага
 
         while (currentY < window.innerHeight) {
             currentY += segmentHeight * (0.8 + Math.random() * 0.4); // Случайная высота сегмента
@@ -81,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Скрываем молнию через короткое время
         setTimeout(() => {
             lightningPath.style.opacity = 0;
-        }, 150); // Длительность вспышки
+        }, 200); // Длительность вспышки
 
         // Изменение цвета дождя на время молнии
         const rainDrops = document.querySelectorAll('.rain-drop');
@@ -90,17 +92,24 @@ document.addEventListener('DOMContentLoaded', () => {
             drop.style.backgroundColor = 'rgba(255, 100, 100, 0.8)'; // Более яркий красный
         });
 
+        if (backgroundOverlay) {
+            backgroundOverlay.classList.add('lightning-darken');
+        }
+
         setTimeout(() => {
             rainDrops.forEach(drop => {
                 drop.style.backgroundColor = 'rgba(139, 0, 0, 0.6)'; // Возвращаем исходный цвет
             });
-        }, 200); // Чуть дольше, чем вспышка молнии
+            if (backgroundOverlay) {
+                backgroundOverlay.classList.remove('lightning-darken');
+            }
+        }, 300); // Чуть дольше, чем вспышка молнии
     }
 
     // Запускаем молнии с случайным интервалом
     function startLightningCycle() {
         const minDelay = 3000;
-        const maxDelay = 8000; // Немного уменьшил максимальную задержку
+        const maxDelay = 8000;
         const delay = Math.random() * (maxDelay - minDelay) + minDelay;
         setTimeout(() => {
             triggerLightning();

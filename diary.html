@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Niclic Diary - Мой Дневник</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/diary-design.css"> 
+    <link rel="stylesheet" href="styles/animations.css">
+</head>
+<body>
+    <header class="main-header"> <!-- Верхняя панель -->
+        <div class="header-background"></div>
+        </div>
+        <nav class="header-nav">
+            <div class="nav-left">
+                <button class="nav-button" data-page="diary.html">Дневник</button>
+                <button class="nav-button" data-page="projects.html">Проекты</button>
+            </div>
+            <div class="nav-center">
+                <button class="main-menu-button" data-page="index.html">
+                    <span class="menu-icon"></span>
+                    <span class="menu-text">Menu</span>
+                </button>
+            </div>
+            <div class="nav-right">
+                <button class="nav-button" data-page="contact.html">Контакты</button>
+                <button class="nav-button" data-page="support.html">Поддержка</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="diary-content-wrapper"> <!-- Контент страницы дневника -->
+        <div class="diary-scroll-container">
+
+            <div class="intro-block">
+                <h1>Мой Дневник</h1>
+                <p>Добро пожаловать в мой личный дневник. Здесь я делюсь своими мыслями, наблюдениями и приключениями, оформленными в виде плавающих платформ и математических фигур.</p>
+            </div>
+
+            <section class="diary-platform left">
+                <div class="platform-content">
+                    <h2>Запись от 24.10.2023</h2>
+                    <p>Сегодня был необычный день. Встретил старого друга, которого не видел много лет. Мы вспоминали наши приключения и строили планы на будущее. Этот день напомнил мне, как важно ценить моменты и людей в нашей жизни.</p>
+                    <p>Размышления о природе времени и его влиянии на наши отношения.</p>
+                </div>
+            </section>
+
+            <section class="diary-platform right">
+                <div class="platform-content">
+                    <h2>Запись от 23.10.2023</h2>
+                    <p>Размышления о будущем проекта Niclic Diary. Как сделать его не просто хранилищем информации, но и источником вдохновения? Возможно, добавление интерактивных элементов или мини-игр? Изучаю новые технологии и подходы к дизайну пользовательских интерфейсов.</p>
+                </div>
+            </section>
+
+            <section class="diary-platform left">
+                <div class="platform-content">
+                    <h2>Идея: Визуализация данных</h2>
+                    <p>Что если записи дневника можно было бы визуализировать как графики или диаграммы? Например, настроение за день, количество прочитанных книг, или прогресс в изучении чего-либо. Это добавило бы новый уровень анализа и самопознания.</p>
+                </div>
+            </section>
+        </div> 
+    </main>
+
+    <script src="scripts/page-transition.js"></script>
+</body>
+</html>

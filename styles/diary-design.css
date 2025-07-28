@@ -1,0 +1,190 @@
+.diary-content-wrapper {
+    position: fixed; /* Фиксируем на весь экран */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    padding-top: 120px; /* Отступ для шапки */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Контент начинается сверху */
+    overflow-y: auto; /* Если контента много, то скролл внутри */
+    color: #e0e0e0;
+    font-family: 'Georgia', serif;
+    z-index: 1; /* Ниже шапки */
+    transform-origin: center center;
+}
+
+/* Контейнер для скролла, который будет содержать все платформы и фигурки */
+.diary-scroll-container {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto; /* Позволяет скроллить содержимое */
+    padding: 0px; /* Отступы по бокам */
+    box-sizing: border-box; /* Учитываем padding в ширине/высоте */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Центрируем контент по горизонтали */
+
+    /* Скрыть скроллбар для WebKit-браузеров */
+    &::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        background: transparent;
+    }
+
+    /* Скрыть скроллбар для Firefox */
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
+}
+
+/* Вступительный блок */
+.intro-block {
+    max-width: 800px;
+    text-align: center;
+    margin-bottom: 80px; /* Отступ перед первой платформой */
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+}
+
+.intro-block h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 3em;
+    color: #f0f0f0;
+    margin-bottom: 20px;
+}
+
+.intro-block p {
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+
+/* --- Стили для платформ дневника --- */
+.diary-platform {
+    width: 60%; /* Ширина платформы, чтобы оставить место для фигурок */
+    min-height: 250px; /* Минимальная высота платформы */
+    padding: 30px;
+    margin-bottom: 100px; /* Расстояние между платформами и фигурками */
+    background-color: rgba(0, 0, 0, 0.6); /* Полупрозрачный фон */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    position: relative; /* Для clip-path */
+    transition: all 0.5s ease; /* Для анимации при наведении или появлении */
+}
+
+.diary-platform h2 {
+    font-size: 1.8em;
+    color: #d0d0d0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 5px;
+}
+
+.diary-platform p {
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+/* Позиционирование платформ */
+.diary-platform.left {
+    align-self: flex-start; /* Прижимаем к левому краю diary-scroll-container */
+    margin-right: auto; /* Отменяем центрирование align-items: center; */
+
+    clip-path: polygon(
+        0% 0%, 
+        95% 0%, 
+        100% 10%, 
+        100% 90%, 
+        95% 100%, 
+        0% 100%, 
+        0% 0%
+    );
+}
+
+.diary-platform.right {
+    align-self: flex-end; /* Прижимаем к правому краю diary-scroll-container */
+    margin-left: auto; /* Отменяем центрирование align-items: center; */
+
+    clip-path: polygon(
+        5% 0%, 
+        100% 0%, 
+        100% 100%, 
+        5% 100%, 
+        0% 90%, 
+        0% 10%
+    );
+}
+
+/* --- Стили для математических фигурок --- */
+.math-figure-container {
+    width: 30%; /* Ширина контейнера для фигурки */
+    height: 150px; /* Высота контейнера для фигурки */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 80px; /* Расстояние между фигуркой и следующей платформой */
+}
+
+.math-figure-container.left {
+    align-self: flex-start;
+    margin-right: auto;
+    margin-left: 10%; /* Отступ от левого края */
+}
+
+.math-figure-container.right {
+    align-self: flex-end;
+    margin-left: auto;
+    margin-right: 10%; /* Отступ от правого края */
+}
+
+.math-figure {
+    width: 100px; /* Размер самой фигурки */
+    height: 100px;
+    background-color: rgba(150, 0, 0, 0.7); /* Цвет фигурок */
+    border: 2px solid rgba(255, 0, 0, 0.4);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+    transition: all 0.5s ease;
+}
+
+/* Различные формы для фигурок с помощью clip-path */
+.math-figure.circle {
+    border-radius: 50%;
+}
+
+.math-figure.triangle {
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.math-figure.square {
+    /* Квадрат по умолчанию, без clip-path */
+}
+
+/* Добавьте другие формы по желанию: */
+.math-figure.hexagon {
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.math-figure.star {
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+/* Медиа-запросы для адаптивности */
+@media (max-width: 768px) {
+    .diary-platform {
+        width: 90%; /* Шире на маленьких экранах */
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        align-self: center !important; /* Центрируем все платформы */
+        clip-path: none !important; /* Убираем сложные формы на маленьких экранах */
+        border-radius: 10px; /* Делаем обычные скругленные углы */
+    }
+
+    .math-figure-container {
+        width: 80%; /* Шире на маленьких экранах */
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        align-self: center !important; /* Центрируем все фигурки */
+    }
+}

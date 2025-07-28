@@ -16,9 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         slides.forEach((slide, i) => {
             if (i === 0) {
                 slide.classList.add('active'); // Первый слайд активен и виден
-                // Он будет opacity:1 и scale(1) по правилу .slide.active
             } else {
-                // Все остальные слайды неактивны и будут opacity:0 и scale(0.8) по правилу :not(.active)
                 slide.classList.remove('active'); 
             }
         });
@@ -44,30 +42,25 @@ document.addEventListener('DOMContentLoaded', () => {
         // Определяем направление прокрутки
         const direction = index > prevSlideIndex ? 'down' : 'up';
 
-        // 1. Анимация уходящего слайда (prevSlide)
+        // Анимация уходящего слайда (prevSlide)
         if (animate && prevSlide && prevSlide !== nextSlide) {
             prevSlide.classList.remove('active'); // Убираем активный класс
-            // CSS :not(.active) правило позаботится об исчезновении
         }
 
-        // 2. Подготовка приходящего слайда (nextSlide)
-        // Сначала устанавливаем его в начальное положение для появления
+        // Подготовка приходящего слайда (nextSlide)
         if (animate && prevSlide !== nextSlide) {
             if (direction === 'down') {
                 nextSlide.classList.add('from-bottom'); // Приходит снизу
             } else {
                 nextSlide.classList.add('from-top'); // Приходит сверху
             }
-            // Здесь не нужно устанавливать opacity/transform через style,
-            // так как это сделают классы from-top/from-bottom
         }
 
-        // 3. Обновляем позицию контейнера (это запускает его CSS transition)
+        // Обновляем позицию контейнера (это запускает его CSS transition)
         const targetTranslateY = -currentSlideIndex * window.innerHeight;
         slidesContainer.style.transform = `translateY(${targetTranslateY}px)`;
 
-        // 4. Запускаем анимацию появления приходящего слайда с небольшой задержкой
-        // после того, как slidesContainer начал двигаться.
+        // Запускаем анимацию появления приходящего слайда с небольшой задержкой
         setTimeout(() => {
             if (animate && prevSlide !== nextSlide) {
                 // Убираем классы from-top/from-bottom, чтобы слайд "прилетел"
@@ -83,18 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
         slidesContainer.addEventListener('transitionend', function handler() {
             isAnimating = false;
             slidesContainer.removeEventListener('transitionend', handler);
-
-            // После завершения анимации, убедимся, что ушедший слайд
-            // не имеет никаких классов, которые могут помешать ему
-            // быть неактивным (opacity:0, scale:0.8)
-            if (prevSlide && prevSlide !== nextSlide) {
-                // prevSlide.classList.remove('active'); // Уже сделано
-                // prevSlide.classList.remove('from-top', 'from-bottom'); // На всякий случай
-            }
         }, { once: true });
     }
 
-    // --- Генерация и обновление индикаторов (без изменений) ---
+    // --- Генерация и обновление индикаторов ---
     function createIndicators() {
         slideIndicators.innerHTML = '';
         for (let i = 0; i < numSlides; i++) {
@@ -120,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Обработчик события прокрутки колесика мыши (без изменений) ---
+    // --- Обработчик события прокрутки колесика мыши ---
     const slidesWrapper = document.querySelector('.slides-wrapper');
     slidesWrapper.addEventListener('wheel', (event) => {
         event.preventDefault();

@@ -1,0 +1,244 @@
+/* styles/projects-design.css */
+
+.projects-content-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    padding-top: 120px; /* Отступ для шапки */
+    color: #e0e0e0;
+    font-family: 'Arial', sans-serif;
+    z-index: 1;
+    overflow-y: auto; /* Для прокрутки контента */
+    transform-origin: center center;
+}
+
+.projects-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px;
+    text-align: center;
+}
+
+.projects-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 3em;
+    color: #f0f0f0;
+    margin-bottom: 20px;
+}
+
+.projects-intro {
+    font-size: 1.2em;
+    margin-bottom: 40px;
+    color: #c0c0c0;
+}
+
+.projects-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Адаптивная сетка */
+    gap: 30px;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.project-item {
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    cursor: pointer;
+}
+
+.project-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+}
+
+.project-image-container {
+    width: 100%;
+    height: 180px; /* Фиксированная высота для изображений */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1a1a1a; /* Заглушка, если нет изображения */
+}
+
+.project-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Обрезает изображение, чтобы оно вписывалось */
+    display: block;
+}
+
+.project-info {
+    padding: 20px;
+    flex-grow: 1; /* Растягивает блок, чтобы все карточки были одинаковой высоты */
+    display: flex;
+    flex-direction: column;
+}
+
+.project-title-card {
+    font-size: 1.5em;
+    color: #f0f0f0;
+    margin-bottom: 10px;
+    font-family: 'Georgia', serif;
+}
+
+.project-description {
+    font-size: 0.95em;
+    color: #c0c0c0;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    flex-grow: 1; /* Описание может растягиваться */
+}
+
+.project-links {
+    margin-top: auto; /* Прижимает ссылки к низу карточки */
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap; /* Если ссылок много, они переносятся */
+}
+
+.project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #a0a0ff; /* Синий цвет для ссылок */
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: color 0.3s ease;
+}
+
+.project-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.project-link svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor; /* SVG будет цветом текста ссылки */
+}
+
+/* Стили для модального окна (подробного описания) */
+.project-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100; /* Поверх всего */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    backdrop-filter: blur(5px); /* Размытие фона */
+}
+
+.project-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 30px;
+    max-width: 800px;
+    max-height: 80vh; /* Ограничиваем высоту модалки */
+    overflow-y: auto; /* Скролл внутри модалки */
+    color: #e0e0e0;
+    position: relative;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.project-modal.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2em;
+    color: #f0f0f0;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+    color: #ff0000;
+}
+
+.modal-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.modal-image {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: contain;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background-color: #000; /* Если изображение прозрачное */
+}
+
+.modal-section-title {
+    font-size: 1.3em;
+    color: #d0d0d0;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 5px;
+}
+
+.modal-text {
+    font-size: 1.05em;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.modal-list {
+    list-style-type: disc;
+    margin-left: 20px;
+    padding-left: 0;
+}
+
+.modal-list li {
+    margin-bottom: 5px;
+}
+
+.modal-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+/* Стили для сообщений о загрузке/ошибке */
+.loading-message, .error-message {
+    font-size: 1.5em;
+    color: #c0c0c0;
+    margin-top: 50px;
+    text-align: center;
+}

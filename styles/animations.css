@@ -1,0 +1,21 @@
+/* Класс для схлопывания контента */
+.collapsing-out {
+    opacity: 0;
+    transform: scale(0.01); /* Схлопывается в точку */
+    transition: all 0.2s ease-in; /* Плавное схлопывание */
+    transform-origin: center center; /* Точка схлопывания - центр */
+}
+
+/* Класс для расширения контента (при загрузке новой страницы) */
+.expanding-in {
+    opacity: 0;
+    transform: scale(0.01); /* Начинает как точка */
+    transform-origin: center center; /* Точка расширения - центр */
+}
+
+/* Конечное состояние для расширения (применяется JS после загрузки) */
+.expanding-in.active {
+    opacity: 1;
+    transform: scale(1);
+    transition: all 0.4s ease-out; /* Плавное расширение */
+}
