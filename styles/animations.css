@@ -1,3 +1,12 @@
+.page-content-wrapper,
+.diary-content-wrapper,
+.projects-content-wrapper {
+    /* Эти стили будут начальным состоянием для анимации появления */
+    opacity: 0;
+    transform: scale(0.95); /* Немного уменьшено */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Длительность анимации */
+}
+
 /* Класс для схлопывания контента */
 .collapsing-out {
     opacity: 0;

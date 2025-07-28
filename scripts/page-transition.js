@@ -2,7 +2,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const navButtons = document.querySelectorAll('.nav-button, .main-menu-button');
-    const mainContentWrapper = document.querySelector('.page-content-wrapper') || document.querySelector('.diary-content-wrapper') || document.querySelector('.projects-content-wrapper');
+    const mainContentWrapper = document.querySelector('.page-content-wrapper') || 
+                               document.querySelector('.diary-content-wrapper') || 
+                               document.querySelector('.projects-content-wrapper');
 
     // --- Функция для запуска анимации схлопывания и перехода ---
     function startPageTransition(targetPageUrl) {
@@ -11,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Удаляем классы, которые поддерживают видимость, и добавляем схлопывание
+        // Это гарантирует, что элемент перейдет из видимого состояния в схлопывающееся
+        mainContentWrapper.classList.remove('expanding-in', 'active'); // Убедитесь, что эти классы удалены
         mainContentWrapper.classList.add('collapsing-out');
 
         mainContentWrapper.addEventListener('transitionend', function handleCollapseEnd() {
@@ -30,11 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             mainContentWrapper.classList.add('active');
         }, 50);
-
-        mainContentWrapper.addEventListener('transitionend', function handleExpandEnd() {
-            mainContentWrapper.removeEventListener('transitionend', handleExpandEnd);
-            mainContentWrapper.classList.remove('expanding-in', 'active');
-        }, { once: true });
     }
 
     // --- Добавляем слушатели для кнопок навигации ---
@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Запускаем анимацию расширения при загрузке страницы ---
-    animatePageIn();
+    setTimeout(() => {
+        animatePageIn();
+    }, 100);
 });
