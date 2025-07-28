@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     projectModal.classList.add('project-modal');
     document.body.appendChild(projectModal); // Добавляем модальное окно в body
 
-    const API_URL = 'http://localhost:3000/api/projects'; // Адрес вашего бэкенда
+    const API_URL = 'https://niclicdiary.onrender.com/'; // Адрес вашего бэкенда
 
     // --- Функция для получения проектов с бэкенда ---
     async function fetchProjects() {
