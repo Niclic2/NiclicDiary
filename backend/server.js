@@ -2,15 +2,37 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config(); 
 
 const app = express();
 const PORT = process.env.PORT || 3000; 
 
 const projectsFilePath = path.join(__dirname, 'projects.json');
 
+const API_SECRET_KEY = process.env.API_SECRET_KEY; 
+if (!API_SECRET_KEY) {
+    console.error('FATAL ERROR: API_SECRET_KEY is not defined. Please set it in your environment variables or .env file.');
+    process.exit(1); // Завершаем процесс, если ключ не найден
+}
+
 // Middleware
 app.use(cors()); // Разрешаем CORS для всех запросов
 app.use(express.json()); // Позволяет Express парсить JSON-тела запросов
+
+// --- Middleware для аутентификации по API Key ---
+function authenticateApiKey(req, res, next) {
+    const apiKey = req.headers['x-api-key']; 
+
+    if (!apiKey) {
+        return res.status(401).json({ message: 'Unauthorized: API Key is missing.' });
+    }
+
+    if (apiKey === API_SECRET_KEY) { // Сравниваем с ключом из переменных окружения
+        next(); 
+    } else {
+        return res.status(403).json({ message: 'Forbidden: Invalid API Key.' });
+    }
+}
 
 // --- Вспомогательные функции для работы с файлом ---
 function readProjects() {
