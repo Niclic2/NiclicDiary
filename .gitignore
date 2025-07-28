@@ -1,3 +1,7 @@
 node_modules/
 backend/projects.json
+<<<<<<< HEAD
 .env
+=======
+.env
+>>>>>>> fed605f76d86ab2ffa01775b78ba599c40aefde8
