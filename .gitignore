@@ -1,3 +1,4 @@
 node_modules/
 backend/projects.json
 backend/.env
+admin/
