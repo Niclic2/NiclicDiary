@@ -1,4 +1,4 @@
-// 2. Ваша конфигурация Firebase
+// Конфигурация Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCrLG7-H-SMy2hoQyDJK86wrzQrQ_jcOFE",
   authDomain: "niclicdiarybackend-1.firebaseapp.com",
@@ -10,41 +10,56 @@ const firebaseConfig = {
 };
 
 const app = firebase.initializeApp(firebaseConfig); // Используем глобальный объект firebase
-// const db = getFirestore(app); // Эту строку заменить
 const db = firebase.firestore(); // Используем глобальный объект firebase.firestore
 
 
-// const analytics = getAnalytics(app); // Инициализация Analytics, если нужно
-// const auth = getAuth(app); // Инициализация Auth, если нужно
-
 // --- Логика для отображения проектов ---
+function createProjectCard(project) {
+    const projectCard = document.createElement('div');
+    projectCard.classList.add('project-card'); // Основной контейнер карточки
+    projectCard.setAttribute('data-id', project.id);
 
-document.addEventListener('DOMContentLoaded', () => {
-    const projectsListContainer = document.getElementById('projects-list');
-    const loadingMessage = document.querySelector('.loading-message');
-    const errorMessage = document.querySelector('.error-message');
-    const projectsIntro = document.querySelector('.projects-intro');
+    // Добавляем класс 'clickable' для стилизации курсора и индикации интерактивности
+    projectCard.classList.add('clickable'); 
 
-    // Функция для создания HTML-разметки одного проекта (без изменений)
-    function createProjectCard(project) {
-        const projectCard = document.createElement('div');
-        projectCard.classList.add('project-card');
-        projectCard.setAttribute('data-id', project.id);
-
-        projectCard.innerHTML = `
-            <img src="${project.imageUrl}" alt="${project.title}" class="project-image">
-            <h2 class="project-title">${project.title}</h2>
-            <p class="project-description">${project.description}</p>
-            <div class="project-technologies">
-                ${project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+    // Создаем внутреннюю разметку карточки
+    projectCard.innerHTML = `
+        <div class="project-card-inner">
+            <div class="project-card-front">
+                <img src="${project.imageUrl}" alt="${project.title}" class="project-image">
+                <h2 class="project-title">${project.title}</h2>
+                <div class="project-links">
+                    ${project.githubUrl ? `<a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer" class="link-button github-button" onclick="event.stopPropagation()">GitHub</a>` : ''}
+                    ${project.demoUrl ? `<a href="${project.demoUrl}" target="_blank" rel="noopener noreferrer" class="link-button demo-button" onclick="event.stopPropagation()">Демо</a>` : ''}
+                </div>
             </div>
-            <div class="project-links">
-                ${project.githubUrl ? `<a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer" class="link-button github-button">GitHub</a>` : ''}
-                ${project.demoUrl ? `<a href="${project.demoUrl}" target="_blank" rel="noopener noreferrer" class="link-button demo-button">Демо</a>` : ''}
+            <div class="project-card-back">
+                <h3 class="project-back-title">${project.title}</h3>
+                <p class="project-description">${project.description}</p>
+                <div class="project-technologies">
+                    ${project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+                </div>
+                <button class="close-details-button">Закрыть</button>
             </div>
-        `;
-        return projectCard;
+        </div>
+    `;
+
+    // Добавляем обработчик клика для переключения вида
+    projectCard.addEventListener('click', () => {
+        projectCard.classList.toggle('is-flipped'); // Переключаем класс для анимации
+    });
+
+    // Добавляем обработчик клика для кнопки "Закрыть" на обратной стороне
+    const closeButton = projectCard.querySelector('.close-details-button');
+    if (closeButton) {
+        closeButton.addEventListener('click', (event) => {
+            event.stopPropagation(); // Предотвращаем всплытие события, чтобы не сработал клик по всей карточке
+            projectCard.classList.remove('is-flipped');
+        });
     }
+
+    return projectCard;
+}
 
     // Функция для загрузки и отображения проектов из Firestore
     async function loadProjectsFromFirestore() {
@@ -52,11 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
         errorMessage.style.display = 'none';
 
         try {
-            // !!! ИЗМЕНЕНИЕ ЗДЕСЬ !!!
             // Используем метод .collection() на экземпляре базы данных 'db'
             const projectsCol = db.collection('projects');
 
-            // !!! ИЗМЕНЕНИЕ ЗДЕСЬ !!!
             // Используем метод .get() на объекте QuerySnapshot
             const projectsSnapshot = await projectsCol.get();
 
