@@ -25,34 +25,34 @@
 .projects-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px; /* Увеличиваем расстояние между карточками */
+    gap: 30px; /* Расстояние между карточками */
     padding: 20px 0;
 }
 
 /* Стили для карточки проекта */
 .project-card {
-    background-color: #242424;
-    border-radius: 12px; /* Более скругленные углы */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Более выраженная тень */
+    background-color: #2c2c2c; /* Темно-серый фон карточки */
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Более выраженная тень для темного фона */
     overflow: hidden;
-    position: relative; /* Для позиционирования внутренних элементов */
-    perspective: 1000px; /* Для 3D-эффекта переворота */
-    height: 380px; /* Фиксированная высота для единообразия */
-    cursor: pointer; /* Указываем, что карточка кликабельна */
-    transition: transform 0.3s ease-in-out; /* Плавное увеличение при наведении */
+    position: relative;
+    perspective: 1000px;
+    height: 380px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
 }
 
 .project-card:hover {
-    transform: translateY(-5px); /* Небольшое поднятие при наведении */
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15); /* Усиление тени */
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4); /* Усиление тени при наведении */
 }
 
 /* Контейнер для 3D-переворота */
 .project-card-inner {
     width: 100%;
     height: 100%;
-    transition: transform 0.6s; /* Скорость анимации переворота */
-    transform-style: preserve-3d; /* Сохраняем 3D-перспективу для дочерних элементов */
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
 }
 
 /* Когда карточка "перевернута" */
@@ -66,44 +66,44 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    -webkit-backface-visibility: hidden; /* Скрываем обратную сторону во время переворота */
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Распределяем содержимое по высоте */
+    justify-content: space-between;
     padding: 20px;
-    box-sizing: border-box; /* Учитываем padding в размере */
+    box-sizing: border-box;
 }
 
 /* Стили для лицевой стороны */
 .project-card-front {
-    background-color: #ffffff;
-    color: #333;
+    background-color: #2c2c2c; /* Темно-серый фон */
+    color: #f0f0f0; /* Светлый текст */
     text-align: center;
 }
 
 .project-image {
     width: 100%;
-    height: 180px; /* Фиксированная высота изображения */
-    object-fit: cover; /* Обрезает изображение, чтобы оно заполняло контейнер */
-    border-radius: 8px; /* Скругленные углы для изображения */
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
     margin-bottom: 15px;
 }
 
 .project-title {
-    font-size: 1.6em; /* Чуть крупнее заголовок */
-    color: #e2e2e2;
+    font-size: 1.6em;
+    color: #e0e0e0; /* Светлый заголовок */
     margin-top: 0;
     margin-bottom: 10px;
     line-height: 1.2;
 }
 
 .project-links {
-    margin-top: auto; /* Прижимает ссылки к низу */
+    margin-top: auto;
     display: flex;
     justify-content: center;
     gap: 15px;
-    padding-top: 15px; /* Отступ сверху от заголовка */
+    padding-top: 15px;
 }
 
 .link-button {
@@ -114,21 +114,20 @@
     font-weight: bold;
     transition: background-color 0.3s ease, transform 0.2s ease;
     font-size: 0.9em;
+    color: #fff; /* Текст кнопок белый */
 }
 
 .github-button {
-    background-color: #b6b6b6;
-    color: #080808;
+    background-color: #4a4a4a; /* Темно-серый фон для кнопки GitHub */
 }
 
 .github-button:hover {
-    background-color: #555;
+    background-color: #606060; /* Чуть светлее при наведении */
     transform: translateY(-2px);
 }
 
 .demo-button {
-    background-color: #007bff;
-    color: #fff;
+    background-color: #007bff; /* Синий цвет для кнопки Демо */
 }
 
 .demo-button:hover {
@@ -138,29 +137,29 @@
 
 /* Стили для обратной стороны */
 .project-card-back {
-    background-color: #f8f8f8; /* Немного другой фон */
-    color: #555;
-    transform: rotateY(180deg); /* Изначально повернута на 180 градусов */
-    text-align: left; /* Выравнивание текста по левому краю */
+    background-color: #3a3a3a; /* Чуть светлее темно-серый фон для обратной стороны */
+    color: #d0d0d0; /* Светлый текст */
+    transform: rotateY(180deg);
+    text-align: left;
     display: flex;
     flex-direction: column;
 }
 
 .project-back-title {
-    font-size: 1.4em; /* Заголовок на обратной стороне чуть меньше */
-    color: #333;
+    font-size: 1.4em;
+    color: #e0e0e0; /* Светлый заголовок */
     margin-top: 0;
     margin-bottom: 10px;
-    text-align: center; /* Заголовок по центру */
+    text-align: center;
 }
 
 .project-description {
     font-size: 0.95em;
     line-height: 1.6;
-    flex-grow: 1; /* Описание занимает доступное пространство */
+    flex-grow: 1;
     margin-bottom: 15px;
-    overflow-y: auto; /* Если описание длинное, добавляем прокрутку */
-    padding-right: 5px; /* Отступ для скроллбара */
+    overflow-y: auto;
+    padding-right: 5px;
 }
 
 .project-technologies {
@@ -168,12 +167,12 @@
     flex-wrap: wrap;
     gap: 8px;
     margin-top: 15px;
-    margin-bottom: 20px; /* Отступ от кнопки */
+    margin-bottom: 20px;
 }
 
 .tech-tag {
-    background-color: #e0e0e0;
-    color: #666;
+    background-color: #555555; /* Серый фон для тегов технологий */
+    color: #f0f0f0; /* Светлый текст тегов */
     padding: 6px 12px;
     border-radius: 6px;
     font-size: 0.8em;
@@ -182,7 +181,7 @@
 
 .close-details-button {
     background-color: #dc3545; /* Красная кнопка закрытия */
-    color: #fff;
+    color: #fff; /* Белый текст кнопки */
     border: none;
     padding: 10px 20px;
     border-radius: 8px;
@@ -190,9 +189,9 @@
     font-size: 0.9em;
     font-weight: bold;
     transition: background-color 0.3s ease;
-    margin-top: auto; /* Прижимает кнопку к низу */
-    align-self: center; /* Выравнивает кнопку по центру */
-    width: 80%; /* Ширина кнопки */
+    margin-top: auto;
+    align-self: center;
+    width: 80%;
 }
 
 .close-details-button:hover {
@@ -202,43 +201,43 @@
 /* Стили для сообщений */
 .loading-message, .error-message, .projects-intro {
     font-size: 1.1em;
-    color: #666;
+    color: #d0d0d0; /* Светлый текст для сообщений */
     margin-top: 20px;
 }
 
 .error-message {
-    color: #dc3545;
+    color: #ff6b6b; /* Более яркий красный для ошибки на темном фоне */
     font-weight: bold;
 }
 
 /* Адаптивность */
 @media (max-width: 768px) {
     .projects-list {
-        grid-template-columns: 1fr; /* Одна колонка на маленьких экранах */
+        grid-template-columns: 1fr;
     }
     .project-card {
-        height: auto; /* Высота может быть авто на мобильных */
+        height: auto;
     }
     .project-card-front, .project-card-back {
-        position: relative; /* Убираем абсолютное позиционирование для мобильных */
-        transform: none !important; /* Отключаем 3D-переворот */
+        position: relative;
+        transform: none !important;
         backface-visibility: visible;
         height: auto;
     }
     .project-card-back {
-        display: none; /* Изначально скрываем обратную сторону */
-        margin-top: 20px; /* Отступ от передней части */
+        display: none;
+        margin-top: 20px;
     }
     .project-card.is-flipped .project-card-back {
-        display: flex; /* Показываем при клике */
+        display: flex;
     }
     .project-card.is-flipped .project-card-front .project-links {
-        display: none; /* Скрываем ссылки на лицевой стороне при показе деталей */
+        display: none;
     }
     .close-details-button {
-        display: none; /* Кнопка закрытия не нужна, если нет переворота */
+        display: none;
     }
     .project-card-inner {
-        transform: none !important; /* Отключаем 3D-переворот */
+        transform: none !important;
     }
 }
