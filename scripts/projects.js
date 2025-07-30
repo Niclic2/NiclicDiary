@@ -13,7 +13,7 @@ import { getFirestore, collection, getDocs } from "firebase/firestore";
 
 // 2. Ваша конфигурация Firebase
 const firebaseConfig = {
-  apiKey: "ВАШ_API_КЛЮЧ", // Замените на ваш реальный API-ключ из настроек проекта Firebase
+  apiKey: "AIzaSyCrLG7-H-SMy2hoQyDJK86wrzQrQ_jcOFE",
   authDomain: "niclicdiarybackend-1.firebaseapp.com",
   projectId: "niclicdiarybackend-1",
   storageBucket: "niclicdiarybackend-1.firebasestorage.app",
