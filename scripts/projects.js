@@ -1,16 +1,3 @@
-// firebase-init-and-projects.js
-
-// 1. Импорты Firebase SDK
-// Если вы используете npm/yarn и сборщик (рекомендуется для современного JS):
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
-// import { getAnalytics } from "firebase/analytics"; // Если используете Analytics
-// import { getAuth } from "firebase/auth"; // Если будете использовать аутентификацию на фронтенде
-
-// Если вы используете CDN-версию (как в предыдущем примере HTML):
-// Функции будут доступны глобально через firebase.initializeApp, firebase.firestore и т.д.
-// В этом случае, строки import не нужны.
-
 // 2. Ваша конфигурация Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCrLG7-H-SMy2hoQyDJK86wrzQrQ_jcOFE",
@@ -22,9 +9,10 @@ const firebaseConfig = {
   measurementId: "G-3FTTCGGY94"
 };
 
-// 3. Инициализация Firebase приложения и Firestore
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app); // Получаем экземпляр Firestore
+const app = firebase.initializeApp(firebaseConfig); // Используем глобальный объект firebase
+// const db = getFirestore(app); // Эту строку заменить
+const db = firebase.firestore(); // Используем глобальный объект firebase.firestore
+
 
 // const analytics = getAnalytics(app); // Инициализация Analytics, если нужно
 // const auth = getAuth(app); // Инициализация Auth, если нужно
