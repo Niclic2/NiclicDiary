@@ -25,11 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorMessage = document.querySelector('.error-message');
     const projectsIntro = document.querySelector('.projects-intro');
 
-    // Функция для создания HTML-разметки одного проекта
+    // Функция для создания HTML-разметки одного проекта (без изменений)
     function createProjectCard(project) {
         const projectCard = document.createElement('div');
         projectCard.classList.add('project-card');
-        projectCard.setAttribute('data-id', project.id); // Firestore ID
+        projectCard.setAttribute('data-id', project.id);
 
         projectCard.innerHTML = `
             <img src="${project.imageUrl}" alt="${project.title}" class="project-image">
@@ -52,37 +52,37 @@ document.addEventListener('DOMContentLoaded', () => {
         errorMessage.style.display = 'none';
 
         try {
-            // Получаем ссылку на коллекцию 'projects'
-            const projectsCol = collection(db, 'projects');
+            // !!! ИЗМЕНЕНИЕ ЗДЕСЬ !!!
+            // Используем метод .collection() на экземпляре базы данных 'db'
+            const projectsCol = db.collection('projects');
 
-            // Получаем все документы из коллекции
-            const projectsSnapshot = await getDocs(projectsCol);
+            // !!! ИЗМЕНЕНИЕ ЗДЕСЬ !!!
+            // Используем метод .get() на объекте QuerySnapshot
+            const projectsSnapshot = await projectsCol.get();
 
             const projects = [];
             projectsSnapshot.forEach(doc => {
-                // doc.data() - это данные документа
-                // doc.id - это ID документа в Firestore
                 projects.push({ id: doc.id, ...doc.data() });
             });
 
             if (projects.length > 0) {
-                projectsIntro.style.display = 'none'; // Скрываем "Проектов пока нет..."
-                projectsListContainer.innerHTML = ''; // Очищаем контейнер
+                projectsIntro.style.display = 'none';
+                projectsListContainer.innerHTML = '';
                 projects.forEach(project => {
                     const projectCard = createProjectCard(project);
                     projectsListContainer.appendChild(projectCard);
                 });
             } else {
-                projectsIntro.style.display = 'block'; // Показываем "Проектов пока нет...", если коллекция пуста
+                projectsIntro.style.display = 'block';
             }
             
         } catch (error) {
             console.error('Ошибка при загрузке проектов из Firestore:', error);
-            errorMessage.style.display = 'block'; // Показываем сообщение об ошибке
-            projectsIntro.style.display = 'block'; // Убедимся, что это сообщение видно
-            projectsListContainer.innerHTML = ''; // Очищаем список, если была ошибка
+            errorMessage.style.display = 'block';
+            projectsIntro.style.display = 'block';
+            projectsListContainer.innerHTML = '';
         } finally {
-            loadingMessage.textContent = ''; // Скрываем сообщение о загрузке
+            loadingMessage.textContent = '';
         }
     }
 
