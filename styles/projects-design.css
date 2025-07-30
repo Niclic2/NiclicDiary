@@ -31,7 +31,7 @@
 
 /* Стили для карточки проекта */
 .project-card {
-    background-color: #ffffff;
+    background-color: #242424;
     border-radius: 12px; /* Более скругленные углы */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Более выраженная тень */
     overflow: hidden;
@@ -92,7 +92,7 @@
 
 .project-title {
     font-size: 1.6em; /* Чуть крупнее заголовок */
-    color: #333;
+    color: #e2e2e2;
     margin-top: 0;
     margin-bottom: 10px;
     line-height: 1.2;
@@ -117,8 +117,8 @@
 }
 
 .github-button {
-    background-color: #333;
-    color: #fff;
+    background-color: #b6b6b6;
+    color: #080808;
 }
 
 .github-button:hover {
