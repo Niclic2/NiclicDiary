@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>  
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Niclic Diary</title>
+        <link rel="stylesheet" href="styles/main.css"/>
+        <link rel="stylesheet" href="styles/supprot-design.css"/>
+        <link rel="stylesheet" href="styles/header.css"/>
+        <link rel="stylesheet" href="styles/animations.css">
+    </head>
+
+    <body>
+        <header class="main-header"> <!-- Верхняя панель -->
+            <div class="header-background"></div>
+            </div>
+            <nav class="header-nav">
+                <div class="nav-left">
+                    <button class="nav-button" data-page="diary.html">Дневник</button>
+                    <button class="nav-button" data-page="projects.html">Проекты</button>
+                </div>
+                <div class="nav-center">
+                    <button class="main-menu-button" data-page="index.html">
+                        <span class="menu-icon"></span>
+                        <span class="menu-text">Menu</span>
+                    </button>
+                </div>
+                <div class="nav-right">
+                    <button class="nav-button" data-page="contact.html">Контакты</button>
+                    <button class="nav-button" data-page="support.html">Поддержка</button>
+                </div>
+            </nav>
+        </header>
+
+        <div class="page-content-wrapper"> <!-- Для анимации схлопывания -->
+            <section class="slide" id="slide-niclic-diary">
+                <h1 class="slide-title">+79277441134 - Т-банк</h1>
+            </section>
+        </div>
+
+        <script src="scripts/page-transition.js"></script>
+    </body>
+</html>

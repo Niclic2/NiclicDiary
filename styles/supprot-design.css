@@ -1,0 +1,30 @@
+.slide {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    position: relative;
+    pointer-events: none; /* Изначально клики не проходят */
+
+    transition: all 0.5s ease-out;
+}
+
+.slide-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 8em;
+    color: #f0f0f0;
+    text-shadow: 
+        0 0 10px rgba(255, 255, 255, 0.4), 
+        0 0 20px rgba(255, 255, 255, 0.2), 
+        0 0 30px rgba(0, 0, 0, 0.8);
+    margin: 0;
+    padding: 20px;
+    white-space: nowrap;
+    user-select: none;
+}
