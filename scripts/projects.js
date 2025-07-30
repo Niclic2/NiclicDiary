@@ -1,137 +1,103 @@
-// scripts/projects.js
+// firebase-init-and-projects.js
+
+// 1. Импорты Firebase SDK
+// Если вы используете npm/yarn и сборщик (рекомендуется для современного JS):
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+// import { getAnalytics } from "firebase/analytics"; // Если используете Analytics
+// import { getAuth } from "firebase/auth"; // Если будете использовать аутентификацию на фронтенде
+
+// Если вы используете CDN-версию (как в предыдущем примере HTML):
+// Функции будут доступны глобально через firebase.initializeApp, firebase.firestore и т.д.
+// В этом случае, строки import не нужны.
+
+// 2. Ваша конфигурация Firebase
+const firebaseConfig = {
+  apiKey: "ВАШ_API_КЛЮЧ", // Замените на ваш реальный API-ключ из настроек проекта Firebase
+  authDomain: "niclicdiarybackend-1.firebaseapp.com",
+  projectId: "niclicdiarybackend-1",
+  storageBucket: "niclicdiarybackend-1.firebasestorage.app",
+  messagingSenderId: "971006371938",
+  appId: "1:971006371938:web:08f09fe5b6f2052f2d493b",
+  measurementId: "G-3FTTCGGY94"
+};
+
+// 3. Инициализация Firebase приложения и Firestore
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app); // Получаем экземпляр Firestore
+
+// const analytics = getAnalytics(app); // Инициализация Analytics, если нужно
+// const auth = getAuth(app); // Инициализация Auth, если нужно
+
+// --- Логика для отображения проектов ---
 
 document.addEventListener('DOMContentLoaded', () => {
-    const projectsList = document.getElementById('projects-list');
+    const projectsListContainer = document.getElementById('projects-list');
     const loadingMessage = document.querySelector('.loading-message');
     const errorMessage = document.querySelector('.error-message');
+    const projectsIntro = document.querySelector('.projects-intro');
 
-    const projectModal = document.createElement('div');
-    projectModal.classList.add('project-modal');
-    document.body.appendChild(projectModal); // Добавляем модальное окно в body
+    // Функция для создания HTML-разметки одного проекта
+    function createProjectCard(project) {
+        const projectCard = document.createElement('div');
+        projectCard.classList.add('project-card');
+        projectCard.setAttribute('data-id', project.id); // Firestore ID
 
-    const API_URL = 'https://niclicdiary.onrender.com/api/projects'; // Адрес вашего бэкенда
-
-    // --- Функция для получения проектов с бэкенда ---
-    async function fetchProjects() {
-        // Показываем сообщение о загрузке
-        loadingMessage.style.display = 'block';
-        errorMessage.style.display = 'none';
-        projectsList.innerHTML = ''; // Очищаем список перед загрузкой
-
-        try {
-            const response = await fetch(API_URL);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const projects = await response.json();
-            displayProjects(projects);
-        } catch (error) {
-            console.error('Error fetching projects:', error);
-            errorMessage.style.display = 'block';
-        } finally {
-            // Скрываем сообщение о загрузке после завершения (успеха или ошибки)
-            loadingMessage.style.display = 'none'; 
-        }
-    }
-
-    // --- Функция для отображения проектов ---
-    function displayProjects(projects) {
-        if (projects.length === 0) {
-            projectsList.innerHTML = '<p class="projects-intro">Пока нет проектов для отображения.</p>';
-            return;
-        }
-
-        projects.forEach(project => {
-            const projectItem = document.createElement('div');
-            projectItem.classList.add('project-item');
-            projectItem.dataset.projectId = project.id; // Сохраняем ID для модалки
-
-            projectItem.innerHTML = `
-                <div class="project-image-container">
-                    <img src="${project.imageUrl || 'https://via.placeholder.com/300x180?text=No+Image'}" alt="${project.title}" class="project-image">
-                </div>
-                <div class="project-info">
-                    <h3 class="project-title-card">${project.title}</h3>
-                    <p class="project-description">${project.description}</p>
-                    <div class="project-links">
-                        ${project.githubLink ? `<a href="${project.githubLink}" target="_blank" class="project-link">
-                            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.087-.731.084-.716.084-.716 1.205.082 1.838 1.23 1.838 1.23 1.07 1.835 2.809 1.305 3.493.998.108-.776.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.046.138 3.003.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.196-6.091 8.196-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                            GitHub
-                        </a>` : ''}
-                        ${project.liveLink ? `<a href="${project.liveLink}" target="_blank" class="project-link">
-                            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9v-2h2v2zm0-4H9V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                            Live Demo
-                        </a>` : ''}
-                    </div>
-                </div>
-            `;
-            projectsList.appendChild(projectItem);
-
-            // Добавляем слушатель для открытия модального окна
-            projectItem.addEventListener('click', () => showProjectDetails(project));
-        });
-    }
-
-    // --- Функция для отображения подробностей проекта в модальном окне ---
-    function showProjectDetails(project) {
-        projectModal.innerHTML = `
-            <div class="modal-content">
-                <button class="modal-close">&times;</button>
-                <h2 class="modal-title">${project.title}</h2>
-                ${project.imageUrl ? `<img src="${project.imageUrl}" alt="${project.title}" class="modal-image">` : ''}
-                
-                ${project.detailedDescription ? `
-                    <h3 class="modal-section-title">Подробное описание</h3>
-                    <p class="modal-text">${project.detailedDescription}</p>
-                ` : ''}
-
-                ${project.features && project.features.length > 0 ? `
-                    <h3 class="modal-section-title">Ключевые особенности</h3>
-                    <ul class="modal-list">
-                        ${project.features.map(feature => `<li>${feature}</li>`).join('')}
-                    </ul>
-                ` : ''}
-
-                ${project.technologies ? `
-                    <h3 class="modal-section-title">Использованные технологии</h3>
-                    <p class="modal-text">${project.technologies}</p>
-                ` : ''}
-
-                ${project.authors ? `
-                    <h3 class="modal-section-title">Авторы</h3>
-                    <p class="modal-text">${project.authors}</p>
-                ` : ''}
-
-                <div class="modal-links">
-                    ${project.githubLink ? `<a href="${project.githubLink}" target="_blank" class="project-link">
-                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.087-.731.084-.716.084-.716 1.205.082 1.838 1.23 1.838 1.23 1.07 1.835 2.809 1.305 3.493.998.108-.776.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.046.138 3.003.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.196-6.091 8.196-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                        GitHub
-                    </a>` : ''}
-                    ${project.liveLink ? `<a href="${project.liveLink}" target="_blank" class="project-link">
-                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H9v-2h2v2zm0-4H9V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                        Live Demo
-                    </a>` : ''}
-                </div>
+        projectCard.innerHTML = `
+            <img src="${project.imageUrl}" alt="${project.title}" class="project-image">
+            <h2 class="project-title">${project.title}</h2>
+            <p class="project-description">${project.description}</p>
+            <div class="project-technologies">
+                ${project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+            </div>
+            <div class="project-links">
+                ${project.githubUrl ? `<a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer" class="link-button github-button">GitHub</a>` : ''}
+                ${project.demoUrl ? `<a href="${project.demoUrl}" target="_blank" rel="noopener noreferrer" class="link-button demo-button">Демо</a>` : ''}
             </div>
         `;
-        projectModal.classList.add('active'); // Показываем модальное окно
+        return projectCard;
+    }
 
-        // Добавляем слушатель для кнопки закрытия модального окна
-        projectModal.querySelector('.modal-close').addEventListener('click', hideProjectDetails);
+    // Функция для загрузки и отображения проектов из Firestore
+    async function loadProjectsFromFirestore() {
+        loadingMessage.textContent = 'Загрузка проектов...';
+        errorMessage.style.display = 'none';
 
-        // Закрытие по клику вне модального окна
-        projectModal.addEventListener('click', (e) => {
-            if (e.target === projectModal) {
-                hideProjectDetails();
+        try {
+            // Получаем ссылку на коллекцию 'projects'
+            const projectsCol = collection(db, 'projects');
+
+            // Получаем все документы из коллекции
+            const projectsSnapshot = await getDocs(projectsCol);
+
+            const projects = [];
+            projectsSnapshot.forEach(doc => {
+                // doc.data() - это данные документа
+                // doc.id - это ID документа в Firestore
+                projects.push({ id: doc.id, ...doc.data() });
+            });
+
+            if (projects.length > 0) {
+                projectsIntro.style.display = 'none'; // Скрываем "Проектов пока нет..."
+                projectsListContainer.innerHTML = ''; // Очищаем контейнер
+                projects.forEach(project => {
+                    const projectCard = createProjectCard(project);
+                    projectsListContainer.appendChild(projectCard);
+                });
+            } else {
+                projectsIntro.style.display = 'block'; // Показываем "Проектов пока нет...", если коллекция пуста
             }
-        });
+            
+        } catch (error) {
+            console.error('Ошибка при загрузке проектов из Firestore:', error);
+            errorMessage.style.display = 'block'; // Показываем сообщение об ошибке
+            projectsIntro.style.display = 'block'; // Убедимся, что это сообщение видно
+            projectsListContainer.innerHTML = ''; // Очищаем список, если была ошибка
+        } finally {
+            loadingMessage.textContent = ''; // Скрываем сообщение о загрузке
+        }
     }
 
-    // --- Функция для скрытия модального окна ---
-    function hideProjectDetails() {
-        projectModal.classList.remove('active');
-    }
-
-    // --- Запускаем загрузку проектов при загрузке страницы ---
-    fetchProjects();
+    // Вызываем функцию загрузки проектов из Firestore при загрузке страницы
+    loadProjectsFromFirestore();
 });
