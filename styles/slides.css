@@ -64,7 +64,7 @@
 /* Стили для текста на слайдах */
 .slide-title {
     font-family: 'Cinzel Decorative', serif;
-    font-size: 8em;
+    font-size: clamp(1em, 15vw, 8em);
     color: #f0f0f0;
     text-shadow: 
         0 0 10px rgba(255, 255, 255, 0.4), 
@@ -78,7 +78,7 @@
 
 .slide-subtitle {
     font-family: 'Georgia', serif;
-    font-size: 3em;
+    font-size: clamp(2em, 2vw, 3em);
     color: #e0e0e0;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
     margin-bottom: 20px;
@@ -88,14 +88,14 @@
     font-family: 'Arial', sans-serif;
     font-size: 1.2em;
     color: #c0c0c0;
-    max-width: 600px;
+    max-width: clamp(300px, 45vw, 600px);
     text-align: center;
     line-height: 1.6;
 }
 
 .slide-indicators {
     position: fixed; /* Фиксируем на экране */
-    bottom: 20px; /* Отступ от низа */
+    bottom: 60px; /* Отступ от низа */
     left: 50%; /* Центрируем по горизонтали */
     transform: translateX(-50%); /* Точная центровка */
     display: flex; /* Для горизонтального расположения кругляшков */
