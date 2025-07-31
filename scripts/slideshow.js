@@ -9,6 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSlideIndex = 0;
     let isAnimating = false; // Флаг для предотвращения множественных анимаций
 
+    // --- Переменные для обработки свайпов ---
+    let touchStartY = 0;
+    let touchEndY = 0;
+    const touchThreshold = 50; // Минимальное расстояние свайпа для срабатывания (в пикселях)
+
     // --- Инициализация ---
     function init() {
         createIndicators();
@@ -17,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (i === 0) {
                 slide.classList.add('active'); // Первый слайд активен и виден
             } else {
-                slide.classList.remove('active'); 
+                slide.classList.remove('active');
             }
         });
         // Устанавливаем начальную позицию контейнера
@@ -27,7 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Переход к конкретному слайду ---
     function goToSlide(index, animate = true) {
-        if (isAnimating || index < 0 || index >= numSlides) {
+        // Проверяем, не выходим ли за границы слайдов
+        if (index < 0 || index >= numSlides) {
+            return;
+        }
+        // Проверяем, не идет ли уже анимация
+        if (isAnimating && index !== currentSlideIndex) { // Разрешаем повторный вызов для текущего слайда, если он уже активен
             return;
         }
 
@@ -49,6 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Подготовка приходящего слайда (nextSlide)
         if (animate && prevSlide !== nextSlide) {
+            // Сначала убираем все классы направления, чтобы избежать конфликтов
+            nextSlide.classList.remove('from-top', 'from-bottom');
             if (direction === 'down') {
                 nextSlide.classList.add('from-bottom'); // Приходит снизу
             } else {
@@ -57,10 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Обновляем позицию контейнера (это запускает его CSS transition)
+        // ИСПОЛЬЗУЕМ window.innerHeight для высоты слайда
         const targetTranslateY = -currentSlideIndex * window.innerHeight;
         slidesContainer.style.transform = `translateY(${targetTranslateY}px)`;
 
         // Запускаем анимацию появления приходящего слайда с небольшой задержкой
+        // Эта задержка нужна, чтобы браузер успел применить начальное положение (from-top/from-bottom)
+        // до того, как мы снимем эти классы и запустим переход.
         setTimeout(() => {
             if (animate && prevSlide !== nextSlide) {
                 // Убираем классы from-top/from-bottom, чтобы слайд "прилетел"
@@ -73,9 +88,16 @@ document.addEventListener('DOMContentLoaded', () => {
         updateIndicators();
 
         // Ждем завершения анимации перемещения контейнера
+        // Используем 'transitionend' на slidesContainer, так как он перемещается
         slidesContainer.addEventListener('transitionend', function handler() {
             isAnimating = false;
             slidesContainer.removeEventListener('transitionend', handler);
+            // После завершения анимации, убедимся, что только текущий слайд имеет класс 'active'
+            slides.forEach((slide, i) => {
+                if (i !== currentSlideIndex) {
+                    slide.classList.remove('active');
+                }
+            });
         }, { once: true });
     }
 
@@ -108,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Обработчик события прокрутки колесика мыши ---
     const slidesWrapper = document.querySelector('.slides-wrapper');
     slidesWrapper.addEventListener('wheel', (event) => {
-        event.preventDefault();
+        event.preventDefault(); // Предотвращаем стандартную прокрутку страницы
 
         if (isAnimating) {
             return;
@@ -121,7 +143,47 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (delta < 0) { // Прокрутка вверх
             goToSlide(currentSlideIndex - 1);
         }
-    }, { passive: false });
+    }, { passive: false }); // { passive: false } для возможности event.preventDefault()
+
+    // --- Обработчики событий касания (свайпы) ---
+    slidesWrapper.addEventListener('touchstart', (event) => {
+        touchStartY = event.touches[0].clientY; // Запоминаем начальную Y-координату касания
+    }, { passive: true }); // { passive: true } для лучшей производительности на мобильных
+
+    slidesWrapper.addEventListener('touchmove', (event) => {
+        // Можно добавить логику для "перетаскивания" слайда во время движения пальца,
+        // но это усложнит код. Для простого свайпа достаточно touchend.
+    }, { passive: true });
+
+    slidesWrapper.addEventListener('touchend', (event) => {
+        touchEndY = event.changedTouches[0].clientY; // Запоминаем конечную Y-координату касания
+
+        if (isAnimating) {
+            return;
+        }
+
+        const deltaY = touchEndY - touchStartY; // Разница между началом и концом касания
+
+        if (Math.abs(deltaY) > touchThreshold) { // Если свайп достаточно длинный
+            if (deltaY < 0) { // Свайп вверх (палец движется вверх, слайд должен идти вниз)
+                goToSlide(currentSlideIndex + 1);
+            } else { // Свайп вниз (палец движется вниз, слайд должен идти вверх)
+                goToSlide(currentSlideIndex - 1);
+            }
+        }
+    });
+
+
+    // --- Обработка изменения размера окна (для корректной высоты слайдов) ---
+    // Это критично для того, чтобы slidesContainer.style.transform = `translateY(${targetTranslateY}px)`
+    // всегда использовал актуальную высоту окна.
+    window.addEventListener('resize', () => {
+        // При изменении размера окна, пересчитываем позицию текущего слайда
+        // и сразу применяем ее, чтобы избежать "прыжков"
+        const targetTranslateY = -currentSlideIndex * window.innerHeight;
+        slidesContainer.style.transform = `translateY(${targetTranslateY}px)`;
+    });
+
 
     // --- Запуск ---
     init();
