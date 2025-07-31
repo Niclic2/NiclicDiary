@@ -119,8 +119,8 @@
     box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); /* Добавляем свечение */
 }
 
-@media (max-width: 767px) {
-    .indicators-container {
+@media (max-width: 600px) {
+    .slide-indicators {
         bottom: 140px; /* Мобильный отступ */
     }
 }
