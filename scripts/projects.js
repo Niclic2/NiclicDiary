@@ -53,20 +53,6 @@ function createProjectCardElement(project) {
     titleFront.textContent = project.title; // textContent автоматически экранирует
     projectCardFront.appendChild(titleFront);
 
-    const linksFront = document.createElement('div');
-    linksFront.classList.add('project-links');
-
-    const githubButtonFront = createLinkButton(project.githubUrl, 'GitHub', 'github-button');
-    if (githubButtonFront) {
-        linksFront.appendChild(githubButtonFront);
-    }
-
-    const demoButtonFront = createLinkButton(project.demoUrl, 'Демо', 'demo-button');
-    if (demoButtonFront) {
-        linksFront.appendChild(demoButtonFront);
-    }
-    projectCardFront.appendChild(linksFront);
-
     projectCardInner.appendChild(projectCardFront);
 
     // --- BACK SIDE ---
