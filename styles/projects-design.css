@@ -209,33 +209,16 @@
 }
 
 /* Адаптивность */
-@media (max-width: 768px) {
-    .projects-list {
-        grid-template-columns: 1fr;
-    }
+@media (max-width: 1000px) {
     .project-card {
-        height: auto;
+        width: 60%;
+        height: 300px;
     }
-    .project-card-front, .project-card-back {
-        position: relative;
-        transform: none !important;
-        backface-visibility: visible;
-        height: auto;
-    }
-    .project-card-back {
-        display: none;
-        margin-top: 20px;
-    }
-    .project-card.is-flipped .project-card-back {
-        display: flex;
-    }
-    .project-card.is-flipped .project-card-front .project-links {
-        display: none;
-    }
-    .close-details-button {
-        display: none;
-    }
-    .project-card-inner {
-        transform: none !important;
+}
+/* Адаптивность */
+@media (max-width: 650px) {
+    .project-card {
+        width: 90%;
+        height: 300px;
     }
 }
