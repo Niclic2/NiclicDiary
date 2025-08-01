@@ -1,5 +1,3 @@
-/* styles/projects-design.css */
-
 .projects-content-wrapper {
     position: fixed;
     top: 0;
@@ -37,7 +35,8 @@
     overflow: hidden;
     position: relative;
     perspective: 1000px;
-    height: 380px;
+    width: 30%;
+    height: 300px;
     cursor: pointer;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
 }
@@ -84,9 +83,8 @@
 
 .project-image {
     width: 100%;
-    height: 180px;
+    height: 75%;
     object-fit: cover;
-    border-radius: 8px;
     margin-bottom: 15px;
 }
 

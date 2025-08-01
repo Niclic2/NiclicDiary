@@ -12,6 +12,114 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig); // Используем глобальный объект firebase
 const db = firebase.firestore(); // Используем глобальный объект firebase.firestore
 
+function createLinkButton(url, text, className) {
+    if (!url) return null; // Если URL нет, не создаем кнопку
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.classList.add('link-button', className);
+    link.textContent = text;
+    // Важно: event.stopPropagation() должен быть добавлен как обработчик события,
+    // а не как inline-атрибут в HTML-строке.
+    link.addEventListener('click', (event) => {
+        event.stopPropagation();
+    });
+    return link;
+}
+
+// Функция для создания всей карточки проекта
+function createProjectCardElement(project) {
+    const projectCard = document.createElement('div');
+    projectCard.classList.add('project-card'); // Основной контейнер карточки
+    projectCard.setAttribute('data-id', project.id);
+
+    const projectCardInner = document.createElement('div');
+    projectCardInner.classList.add('project-card-inner');
+
+    // --- FRONT SIDE ---
+    const projectCardFront = document.createElement('div');
+    projectCardFront.classList.add('project-card-front');
+
+    const image = document.createElement('img');
+    image.src = project.imageUrl;
+    image.alt = project.title; // alt-текст также должен быть очищен, если приходит извне
+    image.classList.add('project-image');
+    projectCardFront.appendChild(image);
+
+    const titleFront = document.createElement('h2');
+    titleFront.classList.add('project-title');
+    titleFront.textContent = project.title; // textContent автоматически экранирует
+    projectCardFront.appendChild(titleFront);
+
+    const linksFront = document.createElement('div');
+    linksFront.classList.add('project-links');
+
+    const githubButtonFront = createLinkButton(project.githubUrl, 'GitHub', 'github-button');
+    if (githubButtonFront) {
+        linksFront.appendChild(githubButtonFront);
+    }
+
+    const demoButtonFront = createLinkButton(project.demoUrl, 'Демо', 'demo-button');
+    if (demoButtonFront) {
+        linksFront.appendChild(demoButtonFront);
+    }
+    projectCardFront.appendChild(linksFront);
+
+    projectCardInner.appendChild(projectCardFront);
+
+    // --- BACK SIDE ---
+    const projectCardBack = document.createElement('div');
+    projectCardBack.classList.add('project-card-back');
+
+    const titleBack = document.createElement('h3');
+    titleBack.classList.add('project-back-title');
+    titleBack.textContent = project.title;
+    projectCardBack.appendChild(titleBack);
+
+    const description = document.createElement('p');
+    description.classList.add('project-description');
+    description.textContent = project.description;
+    projectCardBack.appendChild(description);
+
+    const technologiesDiv = document.createElement('div');
+    technologiesDiv.classList.add('project-technologies');
+    project.technologies.forEach(tech => {
+        const techSpan = document.createElement('span');
+        techSpan.classList.add('tech-tag');
+        techSpan.textContent = tech;
+        technologiesDiv.appendChild(techSpan);
+    });
+    projectCardBack.appendChild(technologiesDiv);
+
+    const linksBack = document.createElement('div');
+    linksBack.classList.add('project-links');
+
+    const githubButtonBack = createLinkButton(project.githubUrl, 'GitHub', 'github-button');
+    if (githubButtonBack) {
+        linksBack.appendChild(githubButtonBack);
+    }
+
+    const demoButtonBack = createLinkButton(project.demoUrl, 'Демо', 'demo-button');
+    if (demoButtonBack) {
+        linksBack.appendChild(demoButtonBack);
+    }
+    projectCardBack.appendChild(linksBack);
+
+    projectCardInner.appendChild(projectCardBack);
+
+    projectCard.appendChild(projectCardInner);
+
+    projectCard.classList.add('clickable'); 
+
+    // Добавляем обработчик клика для переключения вида
+    projectCard.addEventListener('click', () => {
+        projectCard.classList.toggle('is-flipped'); // Переключаем класс для анимации
+    });
+
+    return projectCard;
+}
 
 // --- Логика для отображения проектов ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -19,54 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingMessage = document.querySelector('.loading-message');
     const errorMessage = document.querySelector('.error-message');
     const projectsIntro = document.querySelector('.projects-intro');
-
-    // Функция для создания HTML-разметки одного проекта (без изменений)
-    function createProjectCard(project) {
-        const projectCard = document.createElement('div');
-        projectCard.classList.add('project-card'); // Основной контейнер карточки
-        projectCard.setAttribute('data-id', project.id);
-
-        // Добавляем класс 'clickable' для стилизации курсора и индикации интерактивности
-        projectCard.classList.add('clickable'); 
-
-        // Создаем внутреннюю разметку карточки
-        projectCard.innerHTML = `
-            <div class="project-card-inner">
-                <div class="project-card-front">
-                    <img src="${project.imageUrl}" alt="${project.title}" class="project-image">
-                    <h2 class="project-title">${project.title}</h2>
-                    <div class="project-links">
-                        ${project.githubUrl ? `<a href="${project.githubUrl}" target="_blank" rel="noopener noreferrer" class="link-button github-button" onclick="event.stopPropagation()">GitHub</a>` : ''}
-                        ${project.demoUrl ? `<a href="${project.demoUrl}" target="_blank" rel="noopener noreferrer" class="link-button demo-button" onclick="event.stopPropagation()">Демо</a>` : ''}
-                    </div>
-                </div>
-                <div class="project-card-back">
-                    <h3 class="project-back-title">${project.title}</h3>
-                    <p class="project-description">${project.description}</p>
-                    <div class="project-technologies">
-                        ${project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
-                    </div>
-                    <button class="close-details-button">Закрыть</button>
-                </div>
-            </div>
-        `;
-
-        // Добавляем обработчик клика для переключения вида
-        projectCard.addEventListener('click', () => {
-            projectCard.classList.toggle('is-flipped'); // Переключаем класс для анимации
-        });
-
-        // Добавляем обработчик клика для кнопки "Закрыть" на обратной стороне
-        const closeButton = projectCard.querySelector('.close-details-button');
-        if (closeButton) {
-            closeButton.addEventListener('click', (event) => {
-                event.stopPropagation(); // Предотвращаем всплытие события, чтобы не сработал клик по всей карточке
-                projectCard.classList.remove('is-flipped');
-            });
-        }
-        
-        return projectCard;
-    }
 
     // Функция для загрузки и отображения проектов из Firestore
     async function loadProjectsFromFirestore() {
@@ -89,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 projectsIntro.style.display = 'none';
                 projectsListContainer.innerHTML = '';
                 projects.forEach(project => {
-                    const projectCard = createProjectCard(project);
+                    const projectCard = createProjectCardElement(project);
                     projectsListContainer.appendChild(projectCard);
                 });
             } else {
